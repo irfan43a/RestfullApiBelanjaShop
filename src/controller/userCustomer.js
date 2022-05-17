@@ -4,7 +4,7 @@
 // const userCustomerModel = require("../models/userCustomer");
 // const commonHelper = require("../helper/common");
 
-// exports.getProducts = async (req, res, next) => {
+// exports.getUserCustomer = async (req, res, next) => {
 //   try {
 //     const page = parseInt(req.query.page) || 1;
 //     const limit = parseInt(req.query.limit) || 5;
@@ -34,7 +34,7 @@
 //   }
 // };
 
-// exports.insertProducts = (req, res, next) => {
+// exports.insertUserCustomer = (req, res, next) => {
 //   const { id_category, name, description, stock, price } = req.body;
 //   const data = { id_category, name, description, stock, price };
 //   userCustomerModel
@@ -55,7 +55,7 @@
 //   const id = req.params.id;
 //   const { name, description, stock, price, id_category } = req.body;
 
-//   pool.query("UPDATE products SET name = $1, description = $2, stock = $3, price = $4, id_category = $5 WHERE id = $6", [name, description, stock, price, id_category, id], (err, result) => {
+//   pool.query("UPDATE user_customer SET name = $1, description = $2, stock = $3, price = $4, id_category = $5 WHERE id = $6", [name, description, stock, price, id_category, id], (err, result) => {
 //     if (!err) {
 //       res.json({
 //         message: "data berhasil di ubah",
@@ -68,7 +68,7 @@
 //   });
 // };
 
-// exports.deleteProducts = (req, res, next) => {
+// exports.deleteUserCustomer = (req, res, next) => {
 //   const id = req.params.id;
 
 //   userCustomerModel
@@ -83,7 +83,7 @@
 //       next(new createError.InternalServerError());
 //     });
 // };
-// exports.detailProduct = async (req, res) => {
+// exports.detailUserCutomer = async (req, res) => {
 //   try {
 //     const id = req.params.id;
 //     const result = await userCustomerModel.getProductById(id);

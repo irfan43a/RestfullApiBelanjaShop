@@ -1,6 +1,4 @@
-const { json } = require("express/lib/response");
 const createError = require("http-errors");
-const pool = require("../config/db");
 const categoryModel = require("../models/category");
 const commonHelper = require("../helper/common");
 
@@ -26,57 +24,47 @@ exports.getCategory = async (req, res, next) => {
         totalData,
         totalPage,
       },
-      data: result,
+      data: result.rows,
     });
   } catch (err) {
     console.log(err);
     next(new createError.InternalServerError());
   }
 };
-exports.insertCategory = (req, res, next) => {
-  const { id, name } = req.body;
-  const data = { id, name };
-  categoryModel
-    .insert(data)
-    .then(() => {
-      res.status(201).json({
-        data,
-        message: "data berhasil di tambahkan",
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      next(new createError.InternalServerError());
-    });
-};
-exports.updateCategory = (req, res, next) => {
-  const id = req.params.id;
-  const name = req.body.name;
+exports.insertCategory = async (req, res, next) => {
+  try {
+    const { id, name } = req.body;
+    const data = { id, name };
+    await categoryModel.insert(data);
+    commonHelper.response(res, data, 201, "data berhasil di tambahkan");
+  } catch (err) {
+    console.log(err);
 
-  pool.query("UPDATE category SET name = $1 WHERE id= $2", [name, id], (err, result) => {
-    if (!err) {
-      res.json({
-        message: "data berhasil dirubah",
-      });
-    } else {
-      res.status(500).json({
-        message: "internal server error",
-      });
-    }
-  });
+    next(new createError.InternalServerError());
+  }
 };
-exports.deleteCategory = (req, res, next) => {
-  const id = req.params.id;
-
-  categoryModel
-    .deleteCategory(id)
-    .then((result) => {
-      res.json({
-        message: "data berhasil di hapus",
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      next(new createError.InternalServerError());
+exports.updateCategory = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const name = req.body.name;
+    const data = { id, name };
+    await categoryModel.update(id, name);
+    commonHelper.response(res, data, 200, "data berhasil di update");
+  } catch (err) {
+    console.log(err);
+    next(new createError.InternalServerError());
+  }
+};
+exports.deleteCategory = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await categoryModel.deleteCategory(id);
+    // commonHelper.response(res, data, 200, "data berhasil di hapus");
+    res.json({
+      message: `data id ${id} berhasil di hapus`,
     });
+  } catch (err) {
+    console.log(err);
+    next(new createError.InternalServerError());
+  }
 };
